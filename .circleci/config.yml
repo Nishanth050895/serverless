@@ -30,6 +30,8 @@ jobs:
           name: Upload New Lambda Function and Install AWS CLI
           command: |
             sudo pip install awscli
+            aws configure list
+            aws configure set region us-east-1
             cd codedeploy_lambda
             aws lambda update-function-code \
                 --function-name  handler \
