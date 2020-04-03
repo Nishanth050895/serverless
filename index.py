@@ -9,7 +9,7 @@ from botocore.exceptions import ClientError
 client = boto3.client('ses')
 
 
-def handler(event):
+def handler(event, context):
     message = event['Records'][0]['Sns']['Message']
     print("SNS Notifications: " + message)
 
