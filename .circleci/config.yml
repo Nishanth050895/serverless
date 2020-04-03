@@ -1,0 +1,46 @@
+---
+version: 2
+jobs:
+  build:
+    filters:
+      branches:
+        only:
+          - master
+    docker:
+      - image: circleci/python:3.7.6
+    steps:
+      - checkout
+      - run:
+          name: Lambda Folder
+          command: |
+            echo "Hello the current build number is ${CIRCLE_BUILD_NUM}"
+            pwd
+            mkdir -p codedeploy_lambda
+            pwd
+            ls -al
+            zip -r csye6225-serverlessLambda-${CIRCLE_BUILD_NUM}.zip index.py
+            mv csye6225-serverlessLambda-${CIRCLE_BUILD_NUM}.zip codedeploy_lambda/
+            cd codedeploy_lambda
+            ls -al
+            pwd
+            cd ..
+            pwd
+            ls -al
+      - run:
+          name: Upload New Lambda Function and Install AWS CLI
+          command: |
+            sudo pip install awscli
+            cd codedeploy_lambda
+            aws lambda update-function-code \
+                --function-name  handler \
+                --zip-file fileb://csye6225-serverlessLambda-${CIRCLE_BUILD_NUM}.zip
+
+workflows:
+  version: 2
+
+  build-deploy-workflow:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
