@@ -34,7 +34,7 @@ jobs:
             aws configure set region us-east-1
             cd codedeploy_lambda
             aws lambda update-function-code \
-                --function-name  handler \
+                --function-name  ${LAMBDA_FUNCTION_NAME} \
                 --zip-file fileb://csye6225-serverlessLambda-${CIRCLE_BUILD_NUM}.zip
 
 workflows:
